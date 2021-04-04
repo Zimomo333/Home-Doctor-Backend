@@ -1,0 +1,1 @@
+insert into audit values(#{id},#{sex},#{realName},#{province},#{area},#{address},#{message},#{background},#{hospital},#{department},#{deputyDeparment},#{professor},#{skills},#{morderPrice},#{porderPrice},#{commitTime},#{email})

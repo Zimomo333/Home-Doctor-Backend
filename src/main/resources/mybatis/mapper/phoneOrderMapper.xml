@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.server.dao.PhoneOrderMapper">
+    <select id="findMyPorder" resultType="com.hk.server.entity.Porder1" parameterType="Map">
+        select p.*,u.username as username from porder p,user u
+        <where>
+            p.doctorid=#{doctorid} and
+            p.doctor_confirm=#{isConfirm} and
+            p.userid=u.id
+            <if test="username != null and username !='' ">
+                and u.username like "%"#{username}"%"
+            </if>
+            <if test="startTime !=null and startTime !='' ">
+                and p.order_time &gt;=#{startTime}
+            </if>
+            <if test="endTime !=null and endTime !='' ">
+                and p.order_time &lt;= #{endTime}
+            </if>
+        </where>
+
+        <if test="quiz1 !=null and quiz1 !='' ">
+            <choose>
+                <when test="quiz1 == 'order_time' ">
+                    order by order_time
+                </when>
+                <when test="quiz1 == 'username' ">
+                    order by username
+                </when>
+                <when test="quiz1 == 'userCtime' ">
+                    order by user_ctime
+                </when>
+                <when test="quiz1 == 'userConfirm' ">
+                    order by user_confirm
+                </when>
+            </choose>
+        </if>
+        <if test="quiz1 ==null || quiz1==''">
+            order by id
+        </if>
+        <if test="type !=null and type == 'up'">
+            asc
+        </if>
+        <if test="type !=null and type == 'down'">
+            desc
+        </if>
+        limit #{start},#{end}
+    </select>
+    <update id="confirm">
+        update porder
+        set doctor_confirm=1
+        <where>
+            id=#{orderid} and doctorid=#{account}
+        </where>
+    </update>
+</mapper>

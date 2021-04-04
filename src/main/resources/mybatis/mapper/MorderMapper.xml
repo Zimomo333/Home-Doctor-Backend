@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.server.dao.DoctorMapper">
+    <select id="findMyMorder" resultType="com.hk.server.entity.Morder1">
+        select *,u.username from morder,user u
+        <where>
+            doctorid=#{id} and
+            user_confirm=#{user_confirm} and
+            userid=u.id
+        </where>
+        order by begin_time desc limit ${start},${end}
+    </select>
+    <select id="findMessageById" resultType="com.hk.server.entity.MorderMessages">
+        select * from morderMessages where orderid=#{id}
+        order by time desc
+    </select>
+</mapper>

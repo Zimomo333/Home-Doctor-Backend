@@ -1,0 +1,1 @@
+insert into morder values(#{id},#{beginTime},#{activeTime},#{content},#{hasPicture},#{price},#{userConfirm},#{doctorConfirm},#{userCtime},#{doctorCtime},#{userid},#{doctorid},#{iscommont})

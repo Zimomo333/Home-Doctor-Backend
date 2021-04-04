@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.server.dao.DoctorMapper">
+    <insert id="insertOne" parameterType="com.hk.server.entity.Doctor">
+        insert into doctor values(#{id},#{sex},#{realName},#{province},#{area},#{address},#{message},#{background},#{hospital},#{department},#{deputyDeparment},#{professor},#{skills},#{morderPrice},#{porderPrice},#{services},#{allcommonts},#{goodcommonts},#{balance},#{state},#{email},#{password})
+    </insert>
+
+    <select id="selectState" resultType="java.lang.Integer">
+        select state from doctor
+        where id=#{id}
+    </select>
+
+    <select id="findAll" resultType="com.hk.server.entity.Doctor" parameterType="map">
+         select * from doctor
+         <where>
+             1=1
+             <if test="realName != null and realName !='' ">
+                 and real_name like "%"#{realName}"%"
+             </if>
+             <if test="email != null and email !='' ">
+                 and email like "%"#{email}"%"
+             </if>
+         </where>
+        <if test="quiz1 !=null and quiz1 !='' ">
+            <choose>
+                <when test="quiz1 == 'id' ">
+                    order by id
+                </when>
+                <when test="quiz1 == 'realName' ">
+                    order by real_name
+                </when>
+                <when test="quiz1 == 'email' ">
+                    order by email
+                </when>
+                <when test="quiz1 == 'state' ">
+                    order by state
+                </when>
+            </choose>
+        </if>
+        <if test="quiz1 ==null || quiz1==''">
+            order by id
+        </if>
+        <if test="type !=null and type == 'up'">
+            asc
+        </if>
+        <if test="type !=null and type == 'down'">
+            desc
+        </if>
+         limit #{start},#{end}
+    </select>
+
+    <select id="findCount" resultType="java.lang.Long">
+        select count(*)
+        from doctor
+    </select>
+
+    <update id="changeState">
+        UPDATE doctor SET state=#{state} WHERE id=#{id}
+    </update>
+
+    <select id="findDoctorByAccount" resultType="com.hk.server.entity.Admin">
+        select id as account,password from doctor
+        <where>
+            email=#{account}
+        </where>
+    </select>
+
+</mapper>

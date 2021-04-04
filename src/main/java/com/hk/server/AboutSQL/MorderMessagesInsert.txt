@@ -1,0 +1,1 @@
+insert into mordermessages values(#{id},#{orderid},#{time},#{content},#{type})

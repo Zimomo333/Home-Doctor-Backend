@@ -1,0 +1,1 @@
+insert into porder values(#{id},#{orderTime},#{userPhone},#{freedTime},#{userConfirm},#{doctorConfirm},#{userCtime},#{doctorCtime},#{price},#{userid},#{doctorid},#{iscommont})

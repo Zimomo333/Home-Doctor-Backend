@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.server.dao.AuditMapper">
+
+    <select id="findAll" resultType="com.hk.server.entity.Audit" parameterType="map">
+        select * from audit
+        <where>
+            1=1
+            <if test="realName != null and realName !='' ">
+                and real_name like "%"#{realName}"%"
+            </if>
+            <if test="email != null and email !='' ">
+                and email like "%"#{email}"%"
+            </if>
+        </where>
+        <if test="quiz1 !=null and quiz1 !='' ">
+            <choose>
+                <when test="quiz1 == 'id' ">
+                    order by id
+                </when>
+                <when test="quiz1 == 'realName' ">
+                    order by real_name
+                </when>
+                <when test="quiz1 == 'sex' ">
+                    order by sex
+                </when>
+                <when test="quiz1 == 'province' ">
+                    order by province
+                </when>
+                <when test="quiz1 == 'hospital' ">
+                    order by hospital
+                </when>
+                <when test="quiz1 == 'professor' ">
+                    order by professor
+                </when>
+                <when test="quiz1 == 'morder_price' ">
+                    order by morder_price
+                </when>
+                <when test="quiz1 == 'porder_price' ">
+                    order by porder_price
+                </when>
+
+            </choose>
+        </if>
+        <if test="quiz1 ==null || quiz1==''">
+            order by id
+        </if>
+        <if test="type !=null and type == 'up'">
+            asc
+        </if>
+        <if test="type !=null and type == 'down'">
+            desc
+        </if>
+        limit #{start},#{end}
+    </select>
+
+    <insert id="insertOnce" useGeneratedKeys="true" keyProperty="id" parameterType="com.hk.server.entity.Audit">
+        INSERT INTO audit values(null,#{sex},#{realName},#{province},#{area},#{address},#{message},#{background},#{hospital},#{department},#{deputyDeparment},#{professor},#{skills},#{morderPrice},#{porderPrice},#{commitTime},#{email})
+    </insert>
+
+    <delete id="deleteOne">
+        DELETE FROM audit WHERE id=#{id}
+    </delete>
+
+    <select id="findById" parameterType="Integer" resultType="com.hk.server.entity.Audit">
+        select * from audit where id=#{id}
+    </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.server.dao.ArticleMapper">
+    <insert id="insertOne" parameterType="com.hk.server.entity.Healthyabout">
+        insert into healthyabout values(#{id},#{content},#{type},#{adminid},#{time},#{title})
+    </insert>
+
+    <update id="updateOne" parameterType="com.hk.server.entity.Healthyabout">
+        update healthyabout
+        set content=#{content},type=#{type}
+        where id=#{id} and adminid=#{adminid}
+    </update>
+
+    <select id="findAll" resultType="com.hk.server.entity.Healthyabout1" parameterType="map">
+        select * from healthyabout
+        <where>
+            adminid=#{adminid}
+            <if test="title != null and title !='' ">
+                and title like "%"#{title}"%"
+            </if>
+            <if test="typep != null and typep !='' ">
+                and type like "%"#{typep}"%"
+            </if>
+            <if test="startTime !=null and startTime !='' ">
+                and time &gt;=#{startTime}
+            </if>
+            <if test="endTime !=null and endTime !='' ">
+                and time &lt;= #{endTime}
+            </if>
+        </where>
+        <if test="quiz1 !=null and quiz1 !='' ">
+            <choose>
+                <when test="quiz1 == 'id' ">
+                    order by id
+                </when>
+                <when test="quiz1 == 'title' ">
+                    order by title
+                </when>
+                <when test="quiz1 == 'type' ">
+                    order by type
+                </when>
+                <when test="quiz1 == 'time' ">
+                    order by time
+                </when>
+            </choose>
+        </if>
+        <if test="quiz1 ==null || quiz1==''">
+            order by id
+        </if>
+        <if test="type !=null and type == 'up'">
+            asc
+        </if>
+        <if test="type !=null and type == 'down'">
+            desc
+        </if>
+        limit #{start},#{end}
+    </select>
+
+    <delete id="deleteOne">
+        delete from healthyabout
+        where id=#{id} and adminid=#{adminid}
+    </delete>
+</mapper>

@@ -1,0 +1,1 @@
+insert into healthrecord values(#{id},#{userid},#{username},#{sex},#{birthdate},#{height},#{issmoke},#{isdrink},#{liverState},#{ismarry},#{chronicDisease},#{other},#{allergy},#{historyDisease})

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hk.server.dao.AdminMapper">
+
+    <select id="findAll" resultType="com.hk.server.entity.Admin">
+     select * from admin
+    </select>
+
+    <select id="findAdminByAccount" resultType="com.hk.server.entity.Admin">
+     select * from admin
+     <where>
+         account=#{account}
+     </where>
+    </select>
+
+</mapper>

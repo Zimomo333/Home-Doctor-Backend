@@ -1,0 +1,1 @@
+insert into admin values(#{id},#{account},#{password})

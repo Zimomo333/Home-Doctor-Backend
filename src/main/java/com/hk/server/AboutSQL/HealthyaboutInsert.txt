@@ -1,0 +1,1 @@
+insert into healthyabout values(#{id},#{content},#{type},#{adminid},#{time},#{title})

@@ -1,0 +1,50 @@
+#server:
+#  port: 8080
+#  ssl:
+#    # 数字证书路径
+#    key-store: classpath:server.p12
+#    # 数字证书密码
+#    key-store-password: C45pGxnmtZD
+#    # 数字证书类型
+#    key-store-type: PKCS12
+spring:
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/usr/local/upload/
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+  datasource:
+    # 数据库url
+    url: jdbc:mysql://ip地址:3306/mydb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    # 用户名
+    username: root
+    # 密码
+    password: 密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 连接池最大连接数
+    hikari:
+      maximum-pool-size: 8
+      max-lifetime: 30000
+  redis:
+    database: 0
+    host: 106.52.87.235
+    port: 6379
+    password: 199908
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
+mybatis:
+  config-location: classpath:mybatis/config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+application:
+  path:
+    name: https://www.qnm.green:8080/
+
+logging:
+  level:
+    com.hk.server.dao : debug
