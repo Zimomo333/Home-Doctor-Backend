@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>电话订单列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>
+    <style>
+        .all {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="ok-body">
+    <!--模糊搜索区域-->
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12">
+            <div class="layui-form-item" style="padding: 0px;margin: 0px;border: 0px">
+                <div class="layui-inline" style="float:left;">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="开始日期" autocomplete="off" id="startTime"
+                               name="startTime">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="截止日期" autocomplete="off" id="endTime" name="endTime">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="用户姓名" autocomplete="off" name="username">
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-form-item" style="position: relative;left: -40px;padding: 0px;margin: 0px;border: 0px">
+                <div class="layui-inline">
+                    <label class="layui-form-label">关键词</label>
+                    <div class="layui-input-inline">
+                        <select name="quiz1">
+                            <option value="" selected>请选择排序关键字</option>
+                            <option value="username">姓名</option>
+                            <option value="order_time">下单时间</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-label"
+                               style="margin-left: 0px;border-left: 0px;padding-left: 0px">排序</label>
+                        <div class="layui-input-inline" style="width: 80px">
+                            <select name="type">
+                                <option value="up">升序</option>
+                                <option value="down">降序</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="layui-btn" lay-submit="" lay-filter="search" type="button">
+                        <i class="layui-icon">&#xe615;</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--数据表格-->
+    <table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+</div>
+<!--js逻辑-->
+<script src="../lib/layui/layui.js"></script>
+<script>
+    layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock"], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let laydate = layui.laydate;
+        let okLayer = layui.okLayer;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let $ = layui.jquery;
+
+        laydate.render({elem: "#startTime", type: "datetime"});
+        laydate.render({elem: "#endTime", type: "datetime"});
+        okLoading.close($);
+        let userTable = table.render({
+            elem: '#tableId',
+            url: okMock.api.findAllPhoneOrder,
+            limit: 20,
+            page: true,
+            headers: {
+                token: localStorage.getItem("token")
+            },
+            size: "sm",
+            cols: [[
+                {field: "username", title: "用户姓名", width: 100},
+                {field: "freedTime", title: "用户空闲时间", width: 250},
+                {field: "userPhone", title: "用户电话", width: 150},
+                {
+                    field: "orderTime", title: "下单时间", width: 160, templet: function (d) {
+                        var date = new Date(parseInt(d.orderTime));//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                        var Y = date.getFullYear() + '-';
+                        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                        var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+                        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+                        var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+                        var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+                        return Y + M + D + h + m + s;
+                    }
+                },
+                {title: "操作", width: 200, align: "center", fixed: "right", templet: "#operationTpl"}
+            ]],
+            done: function (res, curr, count) {
+                if (res.code == "403") {
+                    localStorage.clear();
+                    window.parent.location = "./adminLogin.html";
+                }
+            }
+        });
+
+        form.on("submit(search)", function (data) {
+            userTable.reload({
+                where: data.field,
+                page: {curr: 1}
+            });
+            return false;
+        });
+
+
+        table.on("tool(tableFilter)", function (obj) {
+            let data = obj.data;
+            switch (obj.event) {
+                case "finish":
+                    finish(data.id);
+                    break;
+                case "detail":
+                    detail(data);
+                    break;
+            }
+        });
+
+        function finish(id) {
+            okLayer.confirm("确定联系用户并已解决问题了吗？", function () {
+                okUtils.ajax("/doctor/porder/comfirmOrder", "post", {orderid: id}, true).done(function (response) {
+                    okUtils.tableSuccessMsg(response.attach);
+                }).fail(function (error) {
+                    console.log(error)
+                });
+            })
+        }
+        function detail(data) {
+            okLayer.open("健康档案", "healthRecord.html", "95%", "95%", function (layero) {
+                let iframeWin = window[layero.find("iframe")[0]["name"]];
+                iframeWin.initForm(data);
+            }, function () {
+                userTable.reload();
+            })
+        }
+
+    })
+</script>
+<!-- 行工具栏模板 -->
+<script type="text/html" id="operationTpl">
+    <a href="javascript:" title="完成该订单" lay-event="finish"><span
+            class="layui-btn layui-btn-normal layui-btn-xs">完成订单</span></i></a>
+    <a href="javascript:" title="查看用户健康档案" lay-event="detail"><span
+            class="layui-btn layui-btn-normal layui-btn-xs">健康档案</span></i></a>
+</script>
+<!-- 启用|停用模板 -->
+<script type="text/html" id="statusTpl">
+    {{#  if(d.status == 0){ }}
+    <span class="layui-btn layui-btn-normal layui-btn-xs">已启用</span>
+    {{#  } else if(d.status == 1) { }}
+    <span class="layui-btn layui-btn-warm layui-btn-xs">已停用</span>
+    {{#  } }}
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+[
+  {
+    "title": "信息表",
+    "href": "pages/console.html",
+    "fontFamily": "ok-icon",
+    "icon": "&#xe654;",
+    "spread": true,
+    "isCheck": true
+  },
+  {
+    "title": "电话订单",
+    "icon": "&#xe678;",
+    "children": [
+      {
+        "title": "待完成电话订单",
+        "icon": "&#xe667;",
+        "href": "phoneOrder.html"
+      },
+      {
+        "title": "已完成电话订单",
+        "icon": "&#x1005;",
+        "href": "phoneOrderFinished.html"
+      }
+    ]
+  },
+  {
+    "title": "咨询订单",
+    "icon": "&#xe63c;",
+    "children": [
+      {
+        "title": "待完成图文订单",
+        "icon": "&#xe667;",
+        "href": "morderOrder.html"
+      },
+      {
+        "title": "已完成图文订单",
+        "icon": "&#x1005;",
+        "href": "morderOrderFinished.html"
+      }
+    ]
+  }
+]

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>文章列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>
+    <style>
+        .all {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="ok-body">
+    <!--模糊搜索区域-->
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12">
+            <div class="layui-form-item" style="padding: 0px;margin: 0px;border: 0px">
+                <div class="layui-inline" style="float:left;">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="开始日期" autocomplete="off" id="startTime"
+                               name="startTime">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="截止日期" autocomplete="off" id="endTime" name="endTime">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="标题" autocomplete="off" name="title">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="类型" autocomplete="off" name="typep">
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-form-item" style="position: relative;left: -40px;padding: 0px;margin: 0px;border: 0px">
+                <div class="layui-inline">
+                    <label class="layui-form-label">关键词</label>
+                    <div class="layui-input-inline">
+                        <select name="quiz1">
+                            <option value="" selected>请选择排序关键字</option>
+                            <option value="id">ID</option>
+                            <option value="title">标题</option>
+                            <option value="type">类型</option>
+                            <option value="time">发布时间</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-label"
+                               style="margin-left: 0px;border-left: 0px;padding-left: 0px">排序</label>
+                        <div class="layui-input-inline" style="width: 80px">
+                            <select name="type">
+                                <option value="up">升序</option>
+                                <option value="down">降序</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="layui-btn" lay-submit="" lay-filter="search" type="button">
+                        <i class="layui-icon">&#xe615;</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--数据表格-->
+    <table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+</div>
+<!--js逻辑-->
+<script src="../lib/layui/layui.js"></script>
+<script>
+    layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock"], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let laydate = layui.laydate;
+        let okLayer = layui.okLayer;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let $ = layui.jquery;
+
+        laydate.render({elem: "#startTime", type: "datetime"});
+        laydate.render({elem: "#endTime", type: "datetime"});
+        okLoading.close($);
+        let userTable = table.render({
+            elem: '#tableId',
+            url: okMock.api.findAllArticles,
+            limit: 20,
+            page: true,
+            headers: {
+                token: localStorage.getItem("token")
+            },
+            toolbar: true,
+            toolbar: "#toolbarTpl",
+            // size: "sm",
+            cols: [[
+                {field: "id", title: "id", width: 180},
+                {field: "type", title: "类型", width: 150},
+                {field: "title", title: "标题", width: 150},
+                {field: "content", title: "内容", width: 200},
+                {
+                    field: "time", title: "发布时间", width: 200, templet: function (d) {
+                        var date = new Date(parseInt(d.time));//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                        var Y = date.getFullYear() + '-';
+                        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                        var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+                        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+                        var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+                        var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+                        return Y + M + D + h + m + s;
+                    }
+                },
+                {title: "操作", width: 100, align: "center", fixed: "right", templet: "#operationTpl"}
+            ]],
+            done: function (res, curr, count) {
+                if (res.code == "403") {
+                    localStorage.clear();
+                    window.parent.location = "./adminLogin.html";
+                }
+            }
+        });
+
+        form.on("submit(search)", function (data) {
+            userTable.reload({
+                where: data.field,
+                page: {curr: 1}
+            });
+            return false;
+        });
+
+
+        table.on("tool(tableFilter)", function (obj) {
+            let data = obj.data;
+            switch (obj.event) {
+                case "edit":
+                    edit(data);
+                    break;
+                case "del":
+                    del(data.id);
+                    break;
+            }
+        });
+
+
+
+
+        function edit(data) {
+            okLayer.open("文章", "editArticle.html", "90%", "90%", function (layero) {
+                let iframeWin = window[layero.find("iframe")[0]["name"]];
+                iframeWin.initForm(data);
+            }, function () {
+                userTable.reload();
+            })
+        }
+
+        function del(id) {
+            okLayer.confirm("确定要删除吗？", function () {
+                okUtils.ajax("/admin/article/delete", "get", {id: id}, true).done(function (response) {
+                    console.log(response);
+                    okUtils.tableSuccessMsg(response.attach);
+                }).fail(function (error) {
+                    console.log(error)
+                });
+            })
+        }
+    })
+</script>
+<!-- 行工具栏模板 -->
+<script type="text/html" id="operationTpl">
+    <a href="javascript:" title="编辑" lay-event="edit"><i class="layui-icon">&#xe642;</i></a>
+    <a href="javascript:" title="删除" lay-event="del"><i class="layui-icon">&#xe640;</i></a>
+</script>
+</body>
+</html>

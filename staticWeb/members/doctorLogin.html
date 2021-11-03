@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="page-fill">
+<head>
+    <meta charset="UTF-8">
+    <title>问诊平台--医生登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="家有医生医生登录">
+    <meta name="description" content="这个项目的医生登录页面">
+    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="../css/oksub.css"/>
+
+</head>
+<body class="page-fill">
+<div class="page-fill" id="login" style="background-image: url('../images/doctorbg.jpg')">
+    <form class="layui-form" style="box-shadow:0 0 50px #63b6ff">
+        <div class="login_face" style="box-shadow:0 0 30px #63b6ff"><img src="../images/logo.png"></div>
+        <div class="layui-form-item input-item">
+            <label for="username">用户名</label>
+            <input type="text" lay-verify="required" name="account" placeholder="请输入账号" autocomplete="off" id="username"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-item input-item">
+            <label for="password">密码</label>
+            <input type="password" lay-verify="required|password" name="password" placeholder="请输入密码" autocomplete="off"
+                   id="password" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-normal layui-block" lay-filter="login" lay-submit="">登录</button>
+            <br>
+            <br>
+            <button class="layui-btn layui-btn-normal layui-block" onclick="window.location.href='./doctorRegister.html'">注册</button>
+        </div>
+    </form>
+</div>
+<!--js逻辑-->
+<script src="../lib/layui/layui.js"></script>
+<script>
+    var token = localStorage.getItem("token");
+    var who = localStorage.getItem("who");
+    if (token != null && who != null && who == "doctor")
+        window.location = "./doctorIndex.html";
+    layui.use(["form", "okGVerify", "okUtils", "okLayer"], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let okUtils = layui.okUtils;
+        let okLayer = layui.okLayer;
+
+
+        /**
+         * 数据校验
+         */
+        form.verify({
+            password: [/^[\S]{4,12}$/, "密码必须4到12位，且不能出现空格"],
+            captcha: function (val) {
+                if (verifyCode.validate(val) != "true") {
+                    return verifyCode.validate(val)
+                }
+            }
+        });
+
+        /**
+         * 表单提交
+         */
+        form.on("submit(login)", function (data) {
+            okUtils.ajax("/doctor/login", "post", data.field, true).done(function (response) {
+                localStorage.setItem("token", response.token);
+                localStorage.setItem("who", "doctor");
+                okLayer.greenTickMsg(response.message, function () {
+                    window.location = "doctorIndex.html";
+                })
+            }).fail(function (error) {
+                console.log(error)
+            });
+            return false;
+        });
+
+        /**
+         * 表单input组件单击时
+         */
+        $("#login .input-item .layui-input").click(function (e) {
+            e.stopPropagation();
+            $(this).addClass("layui-input-focus").find(".layui-input").focus();
+        });
+
+        /**
+         * 表单input组件获取焦点时
+         */
+        $("#login .layui-form-item .layui-input").focus(function () {
+            $(this).parent().addClass("layui-input-focus");
+        });
+
+        /**
+         * 表单input组件失去焦点时
+         */
+        $("#login .layui-form-item .layui-input").blur(function () {
+            $(this).parent().removeClass("layui-input-focus");
+            if ($(this).val() != "") {
+                $(this).parent().addClass("layui-input-active");
+            } else {
+                $(this).parent().removeClass("layui-input-active");
+            }
+        })
+    });
+</script>
+</body>
+</html>

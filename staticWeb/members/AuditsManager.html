@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>审核资料列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>
+    <style>
+        .all {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="ok-body">
+    <!--模糊搜索区域-->
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12">
+            <div class="layui-form-item" style="padding: 0px;margin: 0px;border: 0px">
+                <div class="layui-inline" style="float:left;">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="姓名" autocomplete="off" name="realName">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="邮箱" autocomplete="off" name="email">
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-form-item" style="position: relative;left: -40px;padding: 0px;margin: 0px;border: 0px">
+                <div class="layui-inline">
+                    <label class="layui-form-label">关键词</label>
+                    <div class="layui-input-inline">
+                        <select name="quiz1">id
+                            <option value="" selected>请选择排序关键字</option>
+                            <option value="id">ID</option>
+                            <option value="realName">姓名</option>
+                            <option value="sex">性别</option>
+                            <option value="province">省份</option>
+                            <option value="hospital">医院</option>
+                            <option value="professor">职位</option>
+                            <option value="morder_price">图文订单价格</option>
+                            <option value="porder_price">电话订单价格</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-label"
+                               style="margin-left: 0px;border-left: 0px;padding-left: 0px">排序</label>
+                        <div class="layui-input-inline" style="width: 80px">
+                            <select name="type">
+                                <option value="up">升序</option>
+                                <option value="down">降序</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="layui-btn" lay-submit="" lay-filter="search" type="button">
+                        <i class="layui-icon">&#xe615;</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--数据表格-->
+    <table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+</div>
+<!--js逻辑-->
+<script src="../lib/layui/layui.js"></script>
+<script>
+    layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock"], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let laydate = layui.laydate;
+        let okLayer = layui.okLayer;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let $ = layui.jquery;
+
+        laydate.render({elem: "#startTime", type: "datetime"});
+        laydate.render({elem: "#endTime", type: "datetime"});
+        okLoading.close($);
+        let userTable = table.render({
+            elem: '#tableId',
+            url: okMock.api.findAllAudit,
+            limit: 20,
+            page: true,
+            headers: {
+                token: localStorage.getItem("token")
+            },
+            size: "sm",
+            cols: [[
+                {field: "id", title: "ID", width: 60, sort: true},
+                {field: "realName", title: "姓名", width: 100},
+                {
+                    field: "sex", title: "性别", width: 60, templet: function (d) {
+                        if (d.sex == 0) return "女";
+                        else return "男";
+                    }
+                },
+                {field: "province", title: "省份", width: 80},
+                {field: "area", title: "市区", width: 80},
+                {field: "address", title: "地址", width: 80},
+                {field: "hospital", title: "医院", width: 100},
+                {field: "professor", title: "职位", width: 80},
+                {field: "morderPrice", title: "图文订单价格", width: 80},
+                {field: "porderPrice", title: "电话订单价格", width: 80},
+                {field: "email", title: "邮箱", width: 160},
+                {title: "操作", width: 100, align: "center", fixed: "right", templet: "#operationTpl"}
+            ]],
+            done: function (res, curr, count) {
+                if (res.code == "403") {
+                    localStorage.clear();
+                    window.parent.location = "./adminLogin.html";
+                }
+            }
+        });
+
+        form.on("submit(search)", function (data) {
+            userTable.reload({
+                where: data.field,
+                page: {curr: 1}
+            });
+            return false;
+        });
+
+
+        table.on("tool(tableFilter)", function (obj) {
+            let data = obj.data;
+            switch (obj.event) {
+                case "detail":
+                    detail(data);
+                    break;
+            }
+        });
+
+
+        function detail(data) {
+            okLayer.open("审核详情", "doctorReview.html", "95%", "95%", function (layero) {
+                let iframeWin = window[layero.find("iframe")[0]["name"]];
+                iframeWin.initForm(data);
+            }, function () {
+                userTable.reload();
+            })
+        }
+
+    })
+</script>
+<!-- 行工具栏模板 -->
+<script type="text/html" id="operationTpl">
+    <a href="javascript:" title="查看详情" lay-event="detail"><span
+            class="layui-btn layui-btn-normal layui-btn-xs">查看详情</span></a>
+</script>
+</body>
+</html>

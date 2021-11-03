@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>图文咨询消息回复</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>
+</head>
+<body>
+<div class="ok-body" style="margin: 20px;width: 98%">
+    <form class="layui-form" lay-filter="component-form-group">
+        <div class="layui-row">
+            <div class="layui-col-lg6">
+                <div style="width: 98%">
+                    <div class="layui-btn layui-btn-normal">病情描述</div>
+                    <br>
+                    <div class="" style="width: 100%;" id="content">
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-lg6">
+                <div style="width: 98%">
+                    <div id="up" class="layui-btn layui-btn-normal" style="margin-bottom: 5px">回复</div>
+                    <br>
+                    <textarea name="replay" id="replay" class="layui-textarea" style="resize:none;width: 90%;height: 80px"
+                              placeholder="输入回复内容"></textarea>
+                </div>
+                <div style="height: 400px;overflow-y: auto;width: 80%;border: #0e90d2 1px solid;padding: 5px" id="messageList">
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!--js逻辑-->
+<script src="../lib/layui/layui.js"></script>
+<script type="text/javascript">
+    let initData;
+
+    function initForm(data) {
+        let jsonString = JSON.stringify(data);
+        initData = JSON.parse(jsonString);
+    }
+
+    layui.use(["layedit", "okUtils", "okMock", "form", "okLayer"], function () {
+        let $ = layui.jquery;
+        let layedit = layui.layedit;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let form = layui.form;
+        let okLayer = layui.okLayer;
+
+        toup();
+
+        function toup()
+        {
+            okUtils.ajax("/doctor/getMorder", "get", {id: initData["id"]}, true).done(function (response) {
+                if (response.code == "200") {
+                    var result = response.result;
+                    $("#content").html(initData["content"]);
+                    $("#messageList").empty();
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].type == "0") {
+                            $("#messageList").append("<div align='right'>"+result[i].content+"</div>");
+                        } else {
+                            $("#messageList").append("<div style='left'>"+result[i].content+"</div>");
+                        }
+                    }
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+        $("#up").click(function () {
+            okUtils.ajax("/doctor/replyMorder","post",{
+                id:initData["id"],
+                content:$("#replay").val(),
+                type:0
+            },true).done(function (res) {
+                if(res.code=="200"){
+                    okLayer.greenTickMsg("回复成功",function () {
+                        toup();
+                    })
+                }
+            })
+        })
+
+        okLoading.close($);
+    });
+</script>
+</body>
+</html>

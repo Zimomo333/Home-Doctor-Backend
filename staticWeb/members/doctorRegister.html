@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>医生详细信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <!--    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>-->
+    <style>
+        .all {
+            width: 100px;
+        }
+
+        .float {
+            float: left;
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+            border: 1px solid #CCCCCC;
+            border-radius: 10px;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        img {
+            position: relative;
+        }
+
+        .result {
+            width: 200px;
+            height: 200px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+
+        #file_input {
+            display: none;
+        }
+
+
+        .delete {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            text-align: center;
+            line-height: 200px;
+            z-index: 10;
+            font-size: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #777;
+            opacity: 0;
+            transition-duration: 0.7s;
+            -webkit-transition-duration: 0.7s;
+        }
+
+
+        .delete:hover {
+            cursor: pointer;
+            opacity: 1;
+        }
+    </style>
+
+</head>
+<body>
+<div class="ok-body">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header"><strong>医生注册表</strong></div>
+            <div class="layui-card-body" style="padding: 15px;">
+                <form class="layui-form" id="form1" action="" enctype="multipart/form-data"
+                      lay-filter="component-form-group">
+                    <!--                    <div class="layui-input-item" style="margin-left: 70px">-->
+                    <!--                        <button type="button" class="layui-btn" id="test-upload-normal">上传图片</button>-->
+                    <!--                        <div class="layui-card" width="377.9" height="179">-->
+                    <!--                            <img class="layui-circle" width="150" height="150">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <br>-->
+                    <div style="margin-left: 110px" class="layui-upload">
+                        <input id="head" type="file" name="head" style="display: none" onchange="prehead()"/>
+                        <button type="button" class="layui-btn" id="test1" onclick='uploadhead()'>上传图片</button>
+                        <div class="layui-upload-list">
+                            <img style="width: 150px; height: 150px" class="layui-upload-img" id="demo1">
+                            <p id="demoText"></p>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="realName" lay-verify="required" autocomplete="off"
+                                       class="layui-input" placeholder="输入你的姓名">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" lay-verify="email" autocomplete="off"
+                                       class="layui-input" placeholder="请输入你的邮箱">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="sex" value="1" title="男" checked="">
+                            <input type="radio" name="sex" value="0" title="女">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所在省份</label>
+                            <div class="layui-input-inline">
+                                <select name="province" lay-filter="province" lay-verify="required" id="province">
+                                    <option value="">请选择省</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">市区</label>
+                            <div class="layui-input-inline">
+                                <select name="area" lay-filter="city" disabled lay-verify="required" id="area">
+                                    <option value="">请选择市</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">县区</label>
+                            <div class="layui-input-inline">
+                                <select name="address" lay-filter="area" id="address" disabled lay-verify="required">
+                                    <option value="">请选择县/区</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <!--                        <div class="layui-inline">-->
+                        <!--                            <label class="layui-form-label">医学背景</label>-->
+                        <!--                            <div class="layui-input-inline">-->
+                        <!--                                <input type="text" name="background" lay-verify="required" autocomplete="off" class="layui-input">-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所属医院</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="hospital" lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所属科室</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="department" lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">担任岗位</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="professor" lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">擅长方向</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="skills" lay-verify="required" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">医学背景：</label>
+                        <div class="layui-input-block">
+                            <textarea name="background" placeholder="描述下你的医学背景" class="layui-textarea"
+                                      style="width: 500px"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">寄语：</label>
+                        <div class="layui-input-block">
+                            <textarea name="message" placeholder="讲一些你的个人期望" class="layui-textarea"
+                                      style="width: 500px"></textarea>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <strong>定价</strong>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">图文咨询</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="morderPrice" lay-verify="required" autocomplete="off"
+                                       class="layui-input" placeholder="期望价格，单位元">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">电话咨询</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="porderPrice" lay-verify="required" autocomplete="off"
+                                       class="layui-input" placeholder="期望价格，单位元">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <strong>证明图片</strong>
+                    <br>
+                    <br>
+                    <div class="layui-btn layui-btn-normal" style="margin-left: 40px" type="button" id="select">添加图片</div>
+                    <div class="layui-btn layui-btn-normal" type="button" id="addP">追加图片</div>
+                    <input type="file" id="file_input" name="files" style="display: none" multiple="multiple"/>
+                    <div id="imageList"></div>
+                    <br>
+                    <div class="layui-form-item layui-layout-admin">
+                        <div class="layui-input-block">
+                            <br>
+                            <div class="layui-footer" style="left: 0;">
+                                <button class="layui-btn" lay-submit="" lay-filter="login"
+                                        type="button" style="margin-left: 230px;">立即提交
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 100px;">
+                                    重置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../lib/layui/layui.js"></script>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script>
+    function changeCode() {
+        $("#mycode").attr('src', "http://123.207.95.77:8080/verify/image?time" + (new Date()).getTime());
+        console.log(this.src)
+    }
+
+    //头像点击事件触发
+    function uploadhead() {
+        $("#head").click();
+    }
+
+    //头像预览
+    function prehead() {
+        var reader = new FileReader();
+        var head = $("#head")[0].files[0];
+        reader.readAsDataURL(head);
+        reader.onload = function (e) {
+            $("#demo1")[0].src = this.result;
+        }
+    }
+
+    var input = document.getElementById("file_input");
+    var oselect = document.getElementById("select");
+    var result;
+    var dataArr = []; // 储存所选图片的结果(文件名和base64数据)
+    var fd;  //FormData方式发送请求
+    var oSelect = document.getElementById("select");
+    var oAdd = document.getElementById("addP");
+    var oInput = document.getElementById("file_input");
+
+    if (typeof FileReader === 'undefined') {
+        alert("抱歉，你的浏览器不支持 FileReader");
+        input.setAttribute('disabled', 'disabled');
+    } else {
+        input.addEventListener('change', readFile, false);
+    }　　　　　//handler
+
+
+    function readFile() {
+        fd = new FormData();
+        var iLen = this.files.length;
+        for (var i = 0; i < iLen; i++) {
+            if (!input['value'].match(/.jpg|.gif|.png|.jpeg|.bmp/i)) {　　//判断上传文件格式
+                return alert("上传的图片格式不正确，请重新选择");
+            }
+            var reader = new FileReader();
+            fd.append(i, this.files[i]);
+            reader.readAsDataURL(this.files[i]);  //转成base64
+            reader.fileName = this.files[i].name;
+
+            reader.onload = function (e) {
+                var imgMsg = {
+                    name: this.fileName,//获取文件名
+                    base64: this.result   //reader.readAsDataURL方法执行完后，base64数据储存在reader.result里
+                }
+                dataArr.push(imgMsg);
+                result = '<div class="delete">delete</div><div class="result"><img class="subPic" src="' + this.result + '" alt="' + this.fileName + '"/></div>';
+                var div = document.createElement('div');
+                div.innerHTML = result;
+                div['className'] = 'float';
+                document.getElementById('imageList').appendChild(div);  　　//插入dom树
+                var img = div.getElementsByTagName('img')[0];
+                img.onload = function () {
+                    var nowHeight = ReSizePic(this); //设置图片大小
+                    this.parentNode.style.display = 'block';
+                    var oParent = this.parentNode;
+                    if (nowHeight) {
+                        oParent.style.paddingTop = (oParent.offsetHeight - nowHeight) / 2 + 'px';
+                    }
+                }
+                div.onclick = function () {
+                    $(this).remove();                  // 在页面中删除该图片元素
+                }
+            }
+        }
+    }
+
+    oSelect.onclick = function () {
+        oInput.value = "";   // 先将oInput值清空，否则选择图片与上次相同时change事件不会触发
+        //清空已选图片
+        $('.float').remove();
+        oInput.click();
+    }
+    oAdd.onclick = function () {
+        oInput.value = "";   // 先将oInput值清空，否则选择图片与上次相同时change事件不会触发
+        oInput.click();
+    }
+
+    function ReSizePic(ThisPic) {
+        var RePicWidth = 200; //这里修改为您想显示的宽度值
+
+        var TrueWidth = ThisPic.width; //图片实际宽度
+        var TrueHeight = ThisPic.height; //图片实际高度
+
+        if (TrueWidth > TrueHeight) {
+            //宽大于高
+            var reWidth = RePicWidth;
+            ThisPic.width = reWidth;
+            //垂直居中
+            var nowHeight = TrueHeight * (reWidth / TrueWidth);
+            return nowHeight;  //将图片修改后的高度返回，供垂直居中用
+        } else {
+            //宽小于高
+            var reHeight = RePicWidth;
+            ThisPic.height = reHeight;
+        }
+    }
+
+
+</script>
+<script>
+    layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock", 'upload', 'okAddlink'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let laydate = layui.laydate;
+        let okLayer = layui.okLayer;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let upload = layui.upload;
+        let $ = layui.jquery;
+
+
+        var okAddlink = layui.okAddlink.init({
+            province: 'select[name=province]',
+            city: 'select[name=area]',
+            area: 'select[name=address]',
+        });
+        laydate.render({
+            elem: '#uDate', //指定元素
+            max: "2019-1-1",
+            value: '2017-09-10',
+        });
+
+        okAddlink.render();//渲染三级联动省市区
+        form.on("submit(login)", function (data) {
+                var form = document.getElementById("form1");
+                var formData = new FormData(form);
+                if (formData.get("head").name == "") {
+                    okLayer.redCrossMsg("必须上传个人头像", null);
+                    return false;
+                } else {
+
+                    var all=$("input").filter(".layui-unselect")
+                    formData.set("province",all[0].value);
+                    formData.set("area",all[1].value);
+                    formData.set("address",all[2].value);
+                    $.ajax({
+                        url: "http://123.207.95.77:8080" + "/audit/upload",
+                        type: "post",
+                        data: formData,
+                        xhrFields: {withCredentials: true},
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.code == "200") {
+                                okLayer.greenTickMsg("提交成功", function () {
+                                    location.reload();
+                                })
+                            } else {
+                                okLayer.redCrossMsg(response.attach, null);
+                                return false;
+                            }
+                        },
+                        error: function (e) {
+                            okLayer.redCrossMsg("服务器错误", null);
+                            throw e;
+                        }
+                    });
+                    return false;
+                }
+            }
+        );
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>健康档案</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>
+    <style>
+        .all {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="ok-body">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header"><strong>用户健康档案</strong></div>
+            <div class="layui-card-body" style="padding: 15px;">
+                <form class="layui-form" action="" lay-filter="component-form-group">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户ID</label>
+                            <div class="layui-input-inline">
+                                <input type="tel" name="userid" id="userid" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" id="username" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">性别</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="sex" id="sex" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">出生日期</label>
+                            <div class="layui-input-inline">
+                                <input name="birthdate" id="birthdate" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">身高</label>
+                            <div class="layui-input-inline">
+                                <input name="height" id="height" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">体重</label>
+                            <div class="layui-input-inline">
+                                <input name="weight" id="weight" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否结婚</label>
+                            <div class="layui-input-inline">
+                                <input name="ismarry" id="ismarry" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">有无慢性病</label>
+                            <div class="layui-input-inline">
+                                <input name="chronic_disease" id="chronicDisease" readonly
+                                       autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否吸烟</label>
+                            <div class="layui-input-inline">
+                                <input name="issmoke" id="issmoke" readonly autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否饮酒</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="isdrink" id="isdrink" readonly
+                                       autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">肝功能是否正常</label>
+                            <div class="layui-input-inline">
+                                <input name="liver_state" id="liverState" readonly
+                                       autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">其他补充</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="other" id="other" readonly
+                                       autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">过敏备注</label>
+                        <div class="layui-input-block">
+                            <input name="allergy" id="allergy" readonly class="layui-textarea"
+                                   style="width: 500px"></input>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">家族病史备注</label>
+                        <div class="layui-input-block">
+                            <input name="history_disease" id="historyDisease" readonly
+                                   class="layui-textarea"
+                                   style="width: 500px"></input>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-layout-admin">
+                        <div class="layui-input-block">
+                            <div class="layui-footer" style="left: 0;">
+                                <button class="layui-btn" lay-submit="" lay-filter="component-form-demo1"
+                                        style="margin-left: 230px;">关闭
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../lib/layui/layui.js"></script>
+<script>
+    let initData;
+
+    function initForm(data) {
+        let jsonString = JSON.stringify(data);
+        initData = JSON.parse(jsonString);
+    }
+
+    layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock", 'upload'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let laydate = layui.laydate;
+        let okLayer = layui.okLayer;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let upload = layui.upload;
+        let $ = layui.jquery;
+        okLoading.close();
+        okUtils.ajax("/doctor/findHealthyRecord", "get", {id: initData["userid"]}, false).done(function (response) {
+            if (response.code == "200") {
+                var data = response.data;
+                for (var key in data) {
+                    if (key == "birthdate") {
+                        var date = new Date(parseInt(data[key]));//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                        var Y = date.getFullYear() + '-';
+                        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                        var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+                        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+                        var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+                        var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+                        data[key] = Y + M + D + h + m + s;
+                    }
+                    if (key != "userid") {
+                        if (data[key] == 0)
+                            data[key] = "无";
+                        else if (data[key] == 1)
+                            data[key] = "有";
+                        else if (data[key] == null)
+                            data[key] = "用户暂无填写";
+                    }
+                    // $("#" + key).removeAttr("readonly");
+                    $("#" + key).val(data[key]);
+                    // $("#" + key).attr("readonly", "readonly");
+
+                }
+            } else {
+                okLayer.redCrossMsg("没有健康档案或查询失败", function () {
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                })
+            }
+        }).fail(function (error) {
+            console.log(error)
+        });
+
+    })
+</script>
+</body>
+</html>

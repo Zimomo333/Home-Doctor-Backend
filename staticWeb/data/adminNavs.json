@@ -1,0 +1,36 @@
+[
+  {
+    "title": "信息表",
+    "href": "pages/console.html",
+    "fontFamily": "ok-icon",
+    "icon": "&#xe654;",
+    "spread": true,
+    "isCheck": true
+  },
+  {
+    "title": "审核医生注册表",
+    "icon": "&#xe674;",
+    "href": "AuditsManager.html"
+  },
+  {
+    "title": "医生账号管理",
+    "icon": "&#xe674;",
+    "href": "doctorManager.html"
+  },
+  {
+    "title": "文章",
+    "icon": "&#xe674;",
+    "children":[
+      {
+        "title": "文章列表",
+        "icon": "&#xe674;",
+        "href": "articleManager.html"
+      },{
+        "title": "添加文章",
+        "icon": "&#xe674;",
+        "href": "addArticle.html"
+      }
+    ]
+  }
+
+]

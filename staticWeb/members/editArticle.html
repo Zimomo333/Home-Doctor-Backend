@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>layedit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+</head>
+<body>
+<div class="ok-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline" style="left: 150px">
+                <label class="layui-form-label"><strong>标题</strong></label>
+                <div class="layui-input-inline" style="width: 300px">
+                    <input type="text" name="title" id="title" lay-verify="required" autocomplete="off"
+                           class="layui-input" placeholder="输入文章标题">
+                </div>
+            </div>
+            <div class="layui-inline" style="left: 150px">
+                <label class="layui-form-label"><strong>文章类型</strong></label>
+                <div class="layui-input-inline" style="width: 150px">
+                    <input type="text" name="type" id="type" lay-verify="required" autocomplete="off"
+                           class="layui-input" placeholder="输入文章类型">
+                </div>
+            </div>
+        </div>
+        <textarea id="editor" style="display: none;">
+        </textarea>
+        <button type="button" class="layui-btn" id="contentBtn" lay-filter="submit" lay-submit="">提交文章</button>
+    </form>
+
+
+    <br/>
+
+</div>
+<!--js逻辑-->
+<script src="../lib/layui/layui.js"></script>
+<script type="text/javascript">
+    let initData;
+
+    function initForm(data) {
+        let jsonString = JSON.stringify(data);
+        initData = JSON.parse(jsonString);
+    }
+
+    layui.use(["layedit", "okUtils", "okMock", "form", "okLayer"], function () {
+        let $ = layui.jquery;
+        let layedit = layui.layedit;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let form = layui.form;
+        let okLayer = layui.okLayer;
+
+        for (var key in initData) {
+            $("#" + key).val(initData[key]);
+        }
+
+        layedit.set({
+            uploadImage: {
+                url: okMock.api.base + "/admin/article/uploadPicture",
+                type: 'post',
+                accept: 'image',
+                acceptMime: 'image/*',
+                exts: 'jpg|png|gif|bmp|jpeg',
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            }
+        });
+
+
+        function getImgSrc(richtext) {
+            let imgList = [];
+            richtext.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/g, (match, capture) => {
+                imgList.push(capture.substring(capture.lastIndexOf("/") + 1));
+            });
+            return imgList;
+        }
+
+        let index = layedit.build("editor", {
+            height: 400
+        });
+
+        layedit.setContent(index, initData["content"], false);
+
+        function imgTagAddStyle(htmlstr) {
+            //正则匹配所有img标签
+            //var regex0 = new RegExp("(i?)(\<img)([^\>]+\>)","gmi");
+            //正则匹配不含style="" 或 style='' 的img标签
+            var regex1 = new RegExp("(i?)(\<img)(?!(.*?style=['\"](.*)['\"])[^\>]+\>)", "gmi");
+            //给不含style="" 或 style='' 的img标签加上style=""
+            htmlstr = htmlstr.replace(regex1, "$2 style=\"\"$3");
+            // console.log("增加style=\"\"后的html字符串："+htmlstr);
+            //正则匹配含有style的img标签
+            var regex2 = new RegExp("(i?)(\<img.*?style=['\"])([^\>]+\>)", "gmi");
+            //在img标签的style里面增加css样式(这里增加的样式：display:block;max-width:100%;height:auto;border:5px solid red;)
+            htmlstr = htmlstr.replace(regex2, "$2display:block;max-width:100%;height:auto;$3");
+            // console.log("在img标签的style里面增加样式后的html字符串："+htmlstr);
+            return htmlstr;
+        }
+
+        form.on("submit(submit)", function (data) {
+            var text = layedit.getContent(index);
+            var list = getImgSrc(text);
+            if (text.length <= 8) {
+                okLayer.redCrossMsg("内容为空或太少", null);
+                return false;
+            } else {
+                text = imgTagAddStyle(text);
+                okUtils.ajax("/admin/article/update", "post", {
+                    id: initData["id"],
+                    title: data.field.title,
+                    type: data.field.type,
+                    content: text,
+                    pictureNames: list
+                }, true).done(function (response) {
+                    if (response.code == "200")
+                        okLayer.greenTickMsg("文章修改成功", function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        })
+                    else {
+                        okLayer.redCrossMsg("文章修改失败", null);
+                        return false;
+                    }
+                })
+            }
+            return false;
+        });
+
+        // $("#contentBtn").click(function () {
+        //     var list = getImgSrc(layedit.getContent(index));
+        //     alert(list);
+        // });
+    });
+</script>
+</body>
+</html>

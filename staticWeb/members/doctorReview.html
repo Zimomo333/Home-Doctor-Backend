@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>审核医生信息</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>
+    <style>
+        .all {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="ok-body">
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header"><strong>审核表</strong></div>
+            <div class="layui-card-body" style="padding: 15px;">
+                <form class="layui-form" action="" lay-filter="component-form-group">
+                    <!--                    <div class="layui-input-item" style="margin-left: 70px">-->
+                    <!--                        <button type="button" class="layui-btn" id="test-upload-normal">上传图片</button>-->
+                    <!--                        <div class="layui-card" width="377.9" height="179">-->
+                    <!--                            <img class="layui-circle" width="150" height="150">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <br>-->
+                    <div style="margin-left: 110px" class="layui-upload">
+                        <div class="layui-upload-list">
+                            <img style="width: 150px; height: 150px" class="layui-upload-img" id="demo1">
+                            <p id="demoText"></p>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="tel" name="realName" id="realName"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="text" name="email" id="email" lay-verify="email"
+                                       readonly
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-inline">
+                            <input style="border-style: none" type="text" name="sex" id="sex" lay-verify="sex" readonly
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所在省份</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="tel" name="province" id="province"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所在区域</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="tel" name="area" id="area" lay-verify="required"
+                                       readonly
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">详细地址</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="tel" name="address" id="address"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">医学背景</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="text" name="background" id="background"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所属医院</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="tel" name="hospital" id="hospital"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所属科室</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="text" name="department" id="department"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">担任岗位</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="tel" name="professor" id="professor"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">擅长方向</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="text" name="skills" id="skills"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">寄语</label>
+                        <div class="layui-input-block">
+                            <textarea style="border-style: none" name="message" id="message" placeholder=""
+                                      class="layui-textarea"
+                                      readonly autocomplete="off" ostyle="width: 500px"></textarea>
+                        </div>
+                    </div>
+
+
+                    <strong>定价</strong>
+                    <hr>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">图文咨询</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="tel" name="morderPrice" id="morderPrice"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">电话咨询</label>
+                            <div class="layui-input-inline">
+                                <input style="border-style: none" type="text" name="porderPrice" id="porderPrice"
+                                       lay-verify="required"
+                                       readonly autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <strong>资料证明</strong>
+                <hr>
+                <div class="layui-carousel" id="test1" lay-filter="test1">
+                    <div carousel-item="" id="List">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-layout-admin">
+                    <div class="layui-input-block">
+                        <div class="layui-footer" style="left: 0;">
+                            <button class="layui-btn" lay-submit="" lay-filter="component-form-demo1"
+                                    style="margin-left: 230px;" id="ok">审核通过
+                            </button>
+                            <button class="layui-btn" lay-submit="" lay-filter="component-form-demo1"
+                                    style="margin-left: 230px;background: red" id="no">审核不通过
+                            </button>
+                            <!--<button type="reset" class="layui-btn layui-btn-primary" style="margin-left: 100px;">重置</button>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display: none" class="layui-form-item layui-form-text" id="idea">
+        <div style="margin: 5%">
+            <textarea placeholder="请输入内容" class="layui-textarea" id="yijian"></textarea>
+        </div>
+    </div>
+</div>
+
+<script src="../lib/layui/layui.js"></script>
+<script>
+    let initData;
+    let id;
+
+    function initForm(data) {
+        let jsonString = JSON.stringify(data);
+        initData = JSON.parse(jsonString);
+        id = initData["id"];
+    }
+
+    function previewImg(obj) {
+        var img = new Image();
+        img.src = obj.src;
+
+        let window_height = 680;
+        let window_width = 700;
+
+        var imgHtml = "<img src='" + obj.src + "' style='max-width: " + window_width + "px;' />";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: '5%',
+            area: '700px',
+            shadeClose: true,
+            scrollbar: false,
+            title: "资料证明预览", //不显示标题
+            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function () {
+                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+            }
+        });
+    }
+
+    layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock", 'upload', 'carousel', 'layer'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let laydate = layui.laydate;
+        let okLayer = layui.okLayer;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let upload = layui.upload;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+        let carousel = layui.carousel;
+        okLoading.close();
+        $("#demo1").attr("src", okMock.api.base + "/images/" + id + "/head.jpg");
+
+        for (var key in initData) {
+            $("#" + key).val(initData[key]);
+        }
+        $("#ok").click(function () {
+            okUtils.ajax("/admin/dealAudit", "get", {id: id, result: 1}, false).done(function (response) {
+                if (response.code == "200") {
+                    okLayer.greenTickMsg("操作成功", function () {
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                    });
+
+                }
+            })
+        });
+        //
+        $("#no").click(function () {
+            layer.open({
+                type: 1 //Page层类型
+                , area: ['380px', '270px']
+                , title: '审核意见'
+                , btn: ['确定', '取消']
+                , content: $("#idea")
+                , shadeClose: false //点击遮罩关闭
+                , yes: function () {
+                    var text = $("#yijian").val();
+                    if (text == null) {
+                        layer.msg('请填写意见！', {icon: 5});
+                    } else {
+                        okUtils.ajax("/admin/dealAudit", "get", {
+                            id: initData["id"],
+                            result: 0,
+                            content: text
+                        }, false).done(function (response) {
+                            if (response.code == "200") {
+                                okLayer.greenTickMsg("处理成功，已发送邮件通知（如果邮件没错的话)", function () {
+                                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                                })
+                            }
+                        })
+
+                    }
+                }
+                , btn2: function () {
+
+                }
+            });
+        });
+        okUtils.ajax("/audit/getNumsById", "get", {id: id}, true).done(function (response) {
+            if (response.code == "200") {
+                // 可视轮播图大小
+                const window_width = 500;
+                const window_height = 250;
+
+                //常规轮播
+                let ins = carousel.render({
+                    elem: '#test1'
+                    , width: '500px'
+                    , height: '250px'
+                });
+
+                for (var i = 0; i < response.data - 1; i++) {
+                    // 原图片大小
+                    let img = new Image();
+                    let img_width;
+                    let img_height
+
+                    img.onload = function () {
+                        img_width = img.width;
+                        img_height = img.height;
+                        // 如果图片高度或者宽度大于限定的高度或者宽度则进行等比例尺寸压缩
+                        if (img_height > window_height || img_width > window_width) {
+                            // 1.原图片宽高比例 大于等于 图片框宽高比例
+                            if (window_width / window_height <= img_width / img_height) {
+                                img_width = window_width;   //以框的宽度为标准
+                                img_height = window_width * (img_height / img_width);
+                            }
+                            // 2.原图片宽高比例 小于 图片框宽高比例
+                            if (window_width / window_height > img_width / img_height) {
+                                img_width = window_height * (img_width / img_height);
+                                img_height = window_height;   //以框的高度为标准
+                            }
+                        }
+                        var el = "<div style='text-align:center;' >" + "<img src='" + img.src + "' width='" + img_width + "px' height='" + img_height + "px' style='margin: 0 auto' onclick=\"previewImg(this)\" />" +
+                            "</div>";
+
+                        $("#List").append(el);
+
+                        ins.reload({
+                            elem: '#test1'
+                            , width: '500px'
+                            , height: '250px'
+                        })
+                    }
+                    img.src = okMock.api.base + "/images/" + id + "/" + i + ".jpg";
+                }
+
+            }
+        });
+
+
+    });
+
+
+    //let $ = layui.jquery;
+
+
+</script>
+</body>
+</html>

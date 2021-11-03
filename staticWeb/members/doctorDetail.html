@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>医生详细信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/oksub.css">
+    <script type="text/javascript" src="../lib/loading/okLoading.js"></script>
+    <style>
+        .all {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="ok-body">
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space10">
+            <div class="layui-row layui-col-space10">
+                <div class="layui-col-md10">
+                    <div class="layui-col-md4">
+                        <div class="layui-card" width="377.9" height="179">
+                            <img id="head" src="../images/logo.png" style="margin-left: 20px;padding: 68px; "
+                                 class="layui-circle"
+                                 width="150" height="150">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-card">
+                            <div class="layui-card-body">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">ID</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="id" style="border-style:none" value="" type="text" name="id"
+                                               readonly
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">所属医院</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="hospital" style="border-style:none" type="text" name="hospital"
+                                               readonly autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">岗位</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="professor" style="border-style:none" type="text" name="professor"
+                                               readonly autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">邮箱</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="email" style="border-style:none" type="text" name="email"
+                                               readonly
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">电话咨询</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="porderPrice" style="border-style:none" type="text"
+                                               name="porderPrice"
+                                               readonly autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-card">
+                            <div class="layui-card-body">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">姓名</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="realName" style="border-style:none" type="text" name="realName"
+                                               readonly autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">所属科室</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="department" style="border-style:none" type="text"
+                                               name="department"
+                                               readonly autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">擅长方向</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="skills" style="border-style:none" type="text" name="skills"
+                                               readonly
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">图文咨询</label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input id="morderPrice" style="border-style:none" type="text"
+                                               name="morderPrice"
+                                               readonly autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label"></label>
+                                    <div class="layui-input-block" style="width: 50%;">
+                                        <input style="border-style:none" type="text" name="title" readonly
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div id="main" style="margin-left: 200px; width: 800px;height:400px;"></div>
+                        <script src="https://cdn.staticfile.org/echarts/4.8.0/echarts.min.js"></script>
+                        <script type="text/javascript">
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--js逻辑-->
+<script src="../lib/layui/layui.js"></script>
+<script>
+    let initData;
+
+    function initForm(data) {
+        let jsonString = JSON.stringify(data);
+        initData = JSON.parse(jsonString);
+    }
+
+    layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock"], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let laydate = layui.laydate;
+        let okLayer = layui.okLayer;
+        let okUtils = layui.okUtils;
+        let okMock = layui.okMock;
+        let $ = layui.jquery;
+        for( var key in initData) {
+            $("#"+key).val(initData[key]);
+        }
+        $("#head").attr("src",okMock.api.base+"/images/"+initData["id"]+"/head.jpg")
+        okLoading.close();
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.setOption({
+            tooltip: {
+                trigger: 'axis'
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {show: true}
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['服务人数', '评价人数', '好评人数']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} 人'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '人数',
+                    type: 'bar',
+                    data: [initData.services, initData.allcommonts, initData.goodcommonts]
+                }
+            ]
+        });
+    })
+</script>
+</body>
+</html>
